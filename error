@@ -1,0 +1,51 @@
+make -C /lib/modules/5.10.160-26-rk356x/build M=/home/radxa/radxa_imx477_driver-main/imx477_driver modules
+make[1]: Entering directory '/usr/src/linux-headers-5.10.160-26-rk356x'
+  CC [M]  /home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.o
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1129:13: error: 'struct v4l2_subdev_state' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ 1129 |      struct v4l2_subdev_state *sd_state,
+      |             ^~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1167:13: error: 'struct v4l2_subdev_state' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ 1167 |      struct v4l2_subdev_state *sd_state,
+      |             ^~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1209:13: error: 'struct v4l2_subdev_state' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ 1209 |      struct v4l2_subdev_state *sd_state,
+      |             ^~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c: In function 'imx477_g_mbus_config':
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1302:8: error: 'struct v4l2_mbus_config' has no member named 'bus'
+ 1302 |  config->bus.mipi_csi2.num_data_lanes = IMX477_LANES;
+      |        ^~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c: At top level:
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1308:19: error: 'struct v4l2_subdev_state' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ 1308 |            struct v4l2_subdev_state *sd_state,
+      |                   ^~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1341:20: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_mbus_code_enum *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_mbus_code_enum *)' [-Werror=incompatible-pointer-types]
+ 1341 |  .enum_mbus_code = imx477_enum_mbus_code,
+      |                    ^~~~~~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1341:20: note: (near initialization for 'imx477_subdev_pad_ops.enum_mbus_code')
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1342:25: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_frame_interval_enum *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_frame_interval_enum *)' [-Werror=incompatible-pointer-types]
+ 1342 |  .enum_frame_interval = imx477_enum_frame_interval,
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1342:25: note: (near initialization for 'imx477_subdev_pad_ops.enum_frame_interval')
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1343:13: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Werror=incompatible-pointer-types]
+ 1343 |  .set_fmt = imx477_set_fmt,
+      |             ^~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1343:13: note: (near initialization for 'imx477_subdev_pad_ops.set_fmt')
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1344:13: error: initialization of 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_pad_config *, struct v4l2_subdev_format *)' from incompatible pointer type 'int (*)(struct v4l2_subdev *, struct v4l2_subdev_state *, struct v4l2_subdev_format *)' [-Werror=incompatible-pointer-types]
+ 1344 |  .get_fmt = imx477_get_fmt,
+      |             ^~~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1344:13: note: (near initialization for 'imx477_subdev_pad_ops.get_fmt')
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c: In function 'imx477_probe':
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1589:8: error: implicit declaration of function 'v4l2_async_register_subdev_sensor'; did you mean 'v4l2_async_register_subdev_sensor_common'? [-Werror=implicit-function-declaration]
+ 1589 |  ret = v4l2_async_register_subdev_sensor(sd);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |        v4l2_async_register_subdev_sensor_common
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c: At top level:
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1624:12: error: initialization of 'int (*)(struct i2c_client *)' from incompatible pointer type 'void (*)(struct i2c_client *)' [-Werror=incompatible-pointer-types]
+ 1624 |  .remove = imx477_remove,
+      |            ^~~~~~~~~~~~~
+/home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.c:1624:12: note: (near initialization for 'imx477_i2c_driver.remove')
+cc1: all warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:273: /home/radxa/radxa_imx477_driver-main/imx477_driver/imx477.o] Error 1
+make[1]: *** [Makefile:1945: /home/radxa/radxa_imx477_driver-main/imx477_driver] Error 2
+make[1]: Leaving directory '/usr/src/linux-headers-5.10.160-26-rk356x'
+make: *** [Makefile:4: all] Error 2
