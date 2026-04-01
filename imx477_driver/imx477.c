@@ -1126,7 +1126,7 @@ static int imx477_s_ctrl(struct v4l2_ctrl *ctrl)
 }
 
 static int imx477_enum_mbus_code(struct v4l2_subdev *sd,
-				 struct v4l2_subdev_state *sd_state,
+				 struct v4l2_subdev_pad_config *cfg,
 				 struct v4l2_subdev_mbus_code_enum *code)
 {
 	if (code->index != 0)
@@ -1164,7 +1164,7 @@ static const struct imx477_mode *imx477_find_best_fit(
 }
 
 static int imx477_set_fmt(struct v4l2_subdev *sd,
-			  struct v4l2_subdev_state *sd_state,
+			  struct v4l2_subdev_pad_config *cfg,
 			  struct v4l2_subdev_format *fmt)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -1206,7 +1206,7 @@ static int imx477_set_fmt(struct v4l2_subdev *sd,
 }
 
 static int imx477_get_fmt(struct v4l2_subdev *sd,
-			  struct v4l2_subdev_state *sd_state,
+			  struct v4l2_subdev_pad_config *cfg,
 			  struct v4l2_subdev_format *fmt)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -1299,13 +1299,15 @@ static int imx477_g_mbus_config(struct v4l2_subdev *sd, unsigned int pad_id,
 				struct v4l2_mbus_config *config)
 {
 	config->type = V4L2_MBUS_CSI2_DPHY;
-	config->bus.mipi_csi2.num_data_lanes = IMX477_LANES;
+	config->flags = V4L2_MBUS_CSI2_2_LANE |
+			V4L2_MBUS_CSI2_CHANNEL_0 |
+			V4L2_MBUS_CSI2_CONTINUOUS_CLOCK;
 
 	return 0;
 }
 
 static int imx477_enum_frame_interval(struct v4l2_subdev *sd,
-				       struct v4l2_subdev_state *sd_state,
+				       struct v4l2_subdev_pad_config *cfg,
 				       struct v4l2_subdev_frame_interval_enum *fie)
 {
 	struct i2c_client *client = v4l2_get_subdevdata(sd);
@@ -1586,20 +1588,22 @@ static int imx477_probe(struct i2c_client *client,
 	snprintf(sd->name, sizeof(sd->name), "m%02d_%s_%s %s",
 		 priv->module_index, facing,
 		 IMX477_NAME, dev_name(sd->dev));
-	ret = v4l2_async_register_subdev_sensor(sd);
+	ret = v4l2_async_register_subdev_sensor_common(sd);
 	if (ret < 0)
 		return ret;
 
 	return ret;
 }
 
-static void imx477_remove(struct i2c_client *client)
+static int imx477_remove(struct i2c_client *client)
 {
 	struct imx477 *priv = to_imx477(client);
 
 	v4l2_async_unregister_subdev(&priv->subdev);
 	media_entity_cleanup(&priv->subdev.entity);
 	v4l2_ctrl_handler_free(&priv->ctrl_handler);
+
+	return 0;
 }
 
 static const struct i2c_device_id imx477_id[] = {
