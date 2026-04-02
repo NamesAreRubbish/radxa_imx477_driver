@@ -4,12 +4,13 @@
 / {
         metadata {
                 title = "Enable Raspberry Pi HQ Camera (IMX477)";
-                compatible = "radxa,zero3";
+                compatible = "radxa,zero3w", "radxa,zero3";
                 category = "camera";
                 exclusive = "csi2_dphy0";
                 description = "Enable Raspberry Pi HQ Camera IMX477.";
         };
 
+        /* Add fixed clock and pwdn regulator to root */
         fragment@0 {
                 target-path = "/";
 
@@ -31,19 +32,22 @@
                                 regulator-always-on;
                                 regulator-boot-on;
                                 enable-active-high;
-                                gpio = <&gpio3 0x16 0x00>;
+                                /* gpio3 phandle=0x7f, pin=GPIO3_C6 (22) */
+                                gpio = <0x7f 0x16 0x00>;
                                 phandle = <0x06>;
                         };
                 };
         };
 
+        /* i2c2 = /i2c@fe5b0000 */
         fragment@1 {
-                target = <&i2c2>;
+                target-path = "/i2c@fe5b0000";
 
                 __overlay__ {
                         status = "okay";
                         pinctrl-names = "default";
-                        pinctrl-0 = <&i2c2m1_xfer>;
+                        /* i2c2m1_xfer phandle = 0x22d */
+                        pinctrl-0 = <0x22d>;
                         #address-cells = <0x01>;
                         #size-cells = <0x00>;
 
@@ -59,7 +63,7 @@
                                 rockchip,camera-module-lens-name = "default";
 
                                 port {
-                                        endpoint {
+                                        ucam_out0: endpoint {
                                                 remote-endpoint = <&mipi_in_ucam0>;
                                                 data-lanes = <0x01 0x02>;
                                         };
@@ -68,16 +72,18 @@
                 };
         };
 
+        /* csi2_dphy_hw = /csi2-dphy-hw@fe870000 */
         fragment@2 {
-                target = <&csi2_dphy_hw>;
+                target-path = "/csi2-dphy-hw@fe870000";
 
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* csi2_dphy0 = /csi2-dphy0 */
         fragment@3 {
-                target = <&csi2_dphy0>;
+                target-path = "/csi2-dphy0";
 
                 __overlay__ {
                         status = "okay";
@@ -112,8 +118,9 @@
                 };
         };
 
+        /* rkisp_vir0 = /rkisp-vir0 */
         fragment@4 {
-                target = <&rkisp_vir0>;
+                target-path = "/rkisp-vir0";
 
                 __overlay__ {
                         status = "okay";
@@ -130,29 +137,33 @@
                 };
         };
 
+        /* rkisp = /rkisp@fdff0000 */
         fragment@5 {
-                target = <&rkisp>;
+                target-path = "/rkisp@fdff0000";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkisp_mmu = /iommu@fdff1a00 */
         fragment@6 {
-                target = <&rkisp_mmu>;
+                target-path = "/iommu@fdff1a00";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkcif_mmu = /iommu@fdfe0800 */
         fragment@7 {
-                target = <&rkcif_mmu>;
+                target-path = "/iommu@fdfe0800";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkcif = /rkcif@fdfe0000 */
         fragment@8 {
-                target = <&rkcif>;
+                target-path = "/rkcif@fdfe0000";
                 __overlay__ {
                         status = "okay";
                 };
