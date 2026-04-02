@@ -16,13 +16,12 @@
 
                 __overlay__ {
 
-                        external-camera-clock-24m {
+                        external_cam_clk: external-camera-clock-24m {
                                 status = "okay";
                                 compatible = "fixed-clock";
                                 clock-frequency = <0x16e3600>;
                                 clock-output-names = "clk_cam_24m";
                                 #clock-cells = <0x00>;
-                                phandle = <0x01>;
                         };
 
                         camera-pwdn-gpio {
@@ -34,7 +33,6 @@
                                 enable-active-high;
                                 /* gpio3 phandle=0x7f, pin=GPIO3_C6 (22) */
                                 gpio = <0x7f 0x16 0x00>;
-                                phandle = <0x06>;
                         };
                 };
         };
@@ -55,7 +53,7 @@
                                 status = "okay";
                                 compatible = "sony,imx477";
                                 reg = <0x1a>;
-                                clocks = <0x01>;
+                                clocks = <&external_cam_clk>;
                                 clock-names = "xvclk";
                                 rockchip,camera-module-index = <0x00>;
                                 rockchip,camera-module-facing = "back";
