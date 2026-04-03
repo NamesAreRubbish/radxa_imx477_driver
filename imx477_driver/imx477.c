@@ -1562,10 +1562,22 @@ static int imx477_probe(struct i2c_client *client,
 	priv->crop_rect.height = priv->cur_mode->height;
 
 	v4l2_i2c_subdev_init(&priv->subdev, client, &imx477_subdev_ops);
-	ret = imx477_ctrls_init(&priv->subdev);
+
+	/* Verify sensor presence before anything else */
+	ret = imx477_video_probe(client);
 	if (ret < 0)
 		return ret;
-	ret = imx477_video_probe(client);
+
+	/*
+	 * Power on so v4l2_ctrl_handler_setup can write default register
+	 * values without locking the I2C bus (sensor needs clock to ACK).
+	 */
+	ret = imx477_s_power(&priv->subdev, 1);
+	if (ret < 0)
+		return ret;
+
+	ret = imx477_ctrls_init(&priv->subdev);
+	imx477_s_power(&priv->subdev, 0);
 	if (ret < 0)
 		return ret;
 
