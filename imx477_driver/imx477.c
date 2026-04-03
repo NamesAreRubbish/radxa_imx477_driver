@@ -975,7 +975,7 @@ static int imx477_s_power(struct v4l2_subdev *sd, int on)
 	if (on) {
 		dev_dbg(&client->dev, "imx477 power on\n");
 		clk_prepare_enable(priv->clk);
-		msleep(20);
+		msleep(100); /* wait for PWDN deassert + sensor ready */
 	} else {
 		dev_dbg(&client->dev, "imx477 power off\n");
 		clk_disable_unprepare(priv->clk);
