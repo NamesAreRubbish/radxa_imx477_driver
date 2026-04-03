@@ -10,32 +10,29 @@
                 description = "Enable Raspberry Pi HQ Camera IMX477.";
         };
 
-        /* Add fixed clock and pwdn regulator to root */
         fragment@0 {
                 target-path = "/";
 
                 __overlay__ {
 
-                        external_cam_clk: external-camera-clock-24m {
+                        external-camera-clock-24m {
                                 status = "okay";
                                 compatible = "fixed-clock";
                                 clock-frequency = <0x16e3600>;
                                 clock-output-names = "clk_cam_24m";
                                 #clock-cells = <0x00>;
+                                phandle = <0x01>;
                         };
-
                 };
         };
 
-        /* i2c2 = /i2c@fe5b0000 */
         fragment@1 {
-                target-path = "/i2c@fe5b0000";
+                target = <&i2c2>;
 
                 __overlay__ {
                         status = "okay";
                         pinctrl-names = "default";
-                        /* i2c2m1_xfer phandle = 0x22d */
-                        pinctrl-0 = <0x22d>;
+                        pinctrl-0 = <&i2c2m1_xfer>;
                         #address-cells = <0x01>;
                         #size-cells = <0x00>;
 
@@ -43,35 +40,35 @@
                                 status = "okay";
                                 compatible = "sony,imx477";
                                 reg = <0x1a>;
-                                clocks = <&external_cam_clk>;
+                                clocks = <0x01>;
                                 clock-names = "xvclk";
                                 rockchip,camera-module-index = <0x00>;
                                 rockchip,camera-module-facing = "back";
                                 rockchip,camera-module-name = "rpi-camera-hq";
                                 rockchip,camera-module-lens-name = "default";
+                                phandle = <0x07>;
 
                                 port {
-                                        ucam_out0: endpoint {
+                                        endpoint {
                                                 remote-endpoint = <&mipi_in_ucam0>;
                                                 data-lanes = <0x01 0x02>;
+                                                phandle = <0x03>;
                                         };
                                 };
                         };
                 };
         };
 
-        /* csi2_dphy_hw = /csi2-dphy-hw@fe870000 */
         fragment@2 {
-                target-path = "/csi2-dphy-hw@fe870000";
+                target = <&csi2_dphy_hw>;
 
                 __overlay__ {
                         status = "okay";
                 };
         };
 
-        /* csi2_dphy0 = /csi2-dphy0 */
         fragment@3 {
-                target-path = "/csi2-dphy0";
+                target = <&csi2_dphy0>;
 
                 __overlay__ {
                         status = "okay";
@@ -89,6 +86,7 @@
                                                 reg = <0x01>;
                                                 remote-endpoint = <&ucam_out0>;
                                                 data-lanes = <0x01 0x02>;
+                                                phandle = <0x02>;
                                         };
                                 };
 
@@ -100,15 +98,15 @@
                                         dphy0_out: endpoint@1 {
                                                 reg = <0x01>;
                                                 remote-endpoint = <&isp0_in>;
+                                                phandle = <0x05>;
                                         };
                                 };
                         };
                 };
         };
 
-        /* rkisp_vir0 = /rkisp-vir0 */
         fragment@4 {
-                target-path = "/rkisp-vir0";
+                target = <&rkisp_vir0>;
 
                 __overlay__ {
                         status = "okay";
@@ -120,38 +118,35 @@
                                 isp0_in: endpoint@0 {
                                         reg = <0x00>;
                                         remote-endpoint = <&dphy0_out>;
+                                        phandle = <0x04>;
                                 };
                         };
                 };
         };
 
-        /* rkisp = /rkisp@fdff0000 */
         fragment@5 {
-                target-path = "/rkisp@fdff0000";
+                target = <&rkisp>;
                 __overlay__ {
                         status = "okay";
                 };
         };
 
-        /* rkisp_mmu = /iommu@fdff1a00 */
         fragment@6 {
-                target-path = "/iommu@fdff1a00";
+                target = <&rkisp_mmu>;
                 __overlay__ {
                         status = "okay";
                 };
         };
 
-        /* rkcif_mmu = /iommu@fdfe0800 */
         fragment@7 {
-                target-path = "/iommu@fdfe0800";
+                target = <&rkcif_mmu>;
                 __overlay__ {
                         status = "okay";
                 };
         };
 
-        /* rkcif = /rkcif@fdfe0000 */
         fragment@8 {
-                target-path = "/rkcif@fdfe0000";
+                target = <&rkcif>;
                 __overlay__ {
                         status = "okay";
                 };
