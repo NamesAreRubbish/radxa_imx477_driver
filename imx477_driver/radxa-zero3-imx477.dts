@@ -36,8 +36,25 @@
                 };
         };
 
-        /* i2c2 = /i2c@fe5b0000 */
+        /* GPIO hog: drive XSHUTDOWN (GPIO3_C6) high before i2c2 probes
+         * so the sensor releases the I2C bus at cold power-up.
+         * gpio3@fe760000 phandle = 0x7f, GPIO3_C6 = offset 0x16
+         */
         fragment@1 {
+                target-path = "/pinctrl/gpio3@fe760000";
+
+                __overlay__ {
+                        imx477-xshutdown-hog {
+                                gpio-hog;
+                                gpios = <0x16 0x00>;
+                                output-high;
+                                line-name = "imx477-xshutdown";
+                        };
+                };
+        };
+
+        /* i2c2 = /i2c@fe5b0000 */
+        fragment@2 {
                 target-path = "/i2c@fe5b0000";
 
                 __overlay__ {
@@ -69,7 +86,7 @@
         };
 
         /* csi2_dphy_hw = /csi2-dphy-hw@fe870000 */
-        fragment@2 {
+        fragment@3 {
                 target-path = "/csi2-dphy-hw@fe870000";
 
                 __overlay__ {
@@ -78,7 +95,7 @@
         };
 
         /* csi2_dphy0 = /csi2-dphy0 */
-        fragment@3 {
+        fragment@4 {
                 target-path = "/csi2-dphy0";
 
                 __overlay__ {
@@ -115,7 +132,7 @@
         };
 
         /* rkisp_vir0 = /rkisp-vir0 */
-        fragment@4 {
+        fragment@5 {
                 target-path = "/rkisp-vir0";
 
                 __overlay__ {
@@ -134,7 +151,7 @@
         };
 
         /* rkisp = /rkisp@fdff0000 */
-        fragment@5 {
+        fragment@6 {
                 target-path = "/rkisp@fdff0000";
                 __overlay__ {
                         status = "okay";
@@ -142,7 +159,7 @@
         };
 
         /* rkisp_mmu = /iommu@fdff1a00 */
-        fragment@6 {
+        fragment@7 {
                 target-path = "/iommu@fdff1a00";
                 __overlay__ {
                         status = "okay";
@@ -150,7 +167,7 @@
         };
 
         /* rkcif_mmu = /iommu@fdfe0800 */
-        fragment@7 {
+        fragment@8 {
                 target-path = "/iommu@fdfe0800";
                 __overlay__ {
                         status = "okay";
@@ -158,7 +175,7 @@
         };
 
         /* rkcif = /rkcif@fdfe0000 */
-        fragment@8 {
+        fragment@9 {
                 target-path = "/rkcif@fdfe0000";
                 __overlay__ {
                         status = "okay";
