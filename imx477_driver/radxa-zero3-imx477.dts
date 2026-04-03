@@ -15,24 +15,24 @@
 
                 __overlay__ {
 
-                        external-camera-clock-24m {
+                        clk_cam_24m: external-camera-clock-24m {
                                 status = "okay";
                                 compatible = "fixed-clock";
                                 clock-frequency = <0x16e3600>;
                                 clock-output-names = "clk_cam_24m";
                                 #clock-cells = <0x00>;
-                                phandle = <0x01>;
                         };
                 };
         };
 
+        /* i2c2 = /i2c@fe5b0000 */
         fragment@1 {
-                target = <&i2c2>;
+                target-path = "/i2c@fe5b0000";
 
                 __overlay__ {
                         status = "okay";
                         pinctrl-names = "default";
-                        pinctrl-0 = <&i2c2m1_xfer>;
+                        pinctrl-0 = <0x22d>;
                         #address-cells = <0x01>;
                         #size-cells = <0x00>;
 
@@ -40,35 +40,35 @@
                                 status = "okay";
                                 compatible = "sony,imx477";
                                 reg = <0x1a>;
-                                clocks = <0x01>;
+                                clocks = <&clk_cam_24m>;
                                 clock-names = "xvclk";
                                 rockchip,camera-module-index = <0x00>;
                                 rockchip,camera-module-facing = "back";
                                 rockchip,camera-module-name = "rpi-camera-hq";
                                 rockchip,camera-module-lens-name = "default";
-                                phandle = <0x07>;
 
                                 port {
-                                        endpoint {
+                                        ucam_out0: endpoint {
                                                 remote-endpoint = <&mipi_in_ucam0>;
                                                 data-lanes = <0x01 0x02>;
-                                                phandle = <0x03>;
                                         };
                                 };
                         };
                 };
         };
 
+        /* csi2_dphy_hw = /csi2-dphy-hw@fe870000 */
         fragment@2 {
-                target = <&csi2_dphy_hw>;
+                target-path = "/csi2-dphy-hw@fe870000";
 
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* csi2_dphy0 = /csi2-dphy0 */
         fragment@3 {
-                target = <&csi2_dphy0>;
+                target-path = "/csi2-dphy0";
 
                 __overlay__ {
                         status = "okay";
@@ -86,7 +86,6 @@
                                                 reg = <0x01>;
                                                 remote-endpoint = <&ucam_out0>;
                                                 data-lanes = <0x01 0x02>;
-                                                phandle = <0x02>;
                                         };
                                 };
 
@@ -98,15 +97,15 @@
                                         dphy0_out: endpoint@1 {
                                                 reg = <0x01>;
                                                 remote-endpoint = <&isp0_in>;
-                                                phandle = <0x05>;
                                         };
                                 };
                         };
                 };
         };
 
+        /* rkisp_vir0 = /rkisp-vir0 */
         fragment@4 {
-                target = <&rkisp_vir0>;
+                target-path = "/rkisp-vir0";
 
                 __overlay__ {
                         status = "okay";
@@ -118,35 +117,38 @@
                                 isp0_in: endpoint@0 {
                                         reg = <0x00>;
                                         remote-endpoint = <&dphy0_out>;
-                                        phandle = <0x04>;
                                 };
                         };
                 };
         };
 
+        /* rkisp = /rkisp@fdff0000 */
         fragment@5 {
-                target = <&rkisp>;
+                target-path = "/rkisp@fdff0000";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkisp_mmu = /iommu@fdff1a00 */
         fragment@6 {
-                target = <&rkisp_mmu>;
+                target-path = "/iommu@fdff1a00";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkcif_mmu = /iommu@fdfe0800 */
         fragment@7 {
-                target = <&rkcif_mmu>;
+                target-path = "/iommu@fdfe0800";
                 __overlay__ {
                         status = "okay";
                 };
         };
 
+        /* rkcif = /rkcif@fdfe0000 */
         fragment@8 {
-                target = <&rkcif>;
+                target-path = "/rkcif@fdfe0000";
                 __overlay__ {
                         status = "okay";
                 };
