@@ -24,16 +24,6 @@
                                 #clock-cells = <0x00>;
                         };
 
-                        camera-pwdn-gpio {
-                                status = "okay";
-                                compatible = "regulator-fixed";
-                                regulator-name = "camera_pwdn_gpio";
-                                regulator-always-on;
-                                regulator-boot-on;
-                                enable-active-high;
-                                /* gpio3 phandle=0x7f, pin=GPIO3_C6 (22) */
-                                gpio = <0x7f 0x16 0x00>;
-                        };
                 };
         };
 
