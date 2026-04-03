@@ -11,7 +11,6 @@
  */
 #include <linux/clk.h>
 #include <linux/delay.h>
-#include <linux/gpio/consumer.h>
 #include <linux/i2c.h>
 #include <linux/init.h>
 #include <linux/io.h>
@@ -745,7 +744,6 @@ struct imx477 {
 	struct media_pad pad;
 	struct v4l2_ctrl_handler ctrl_handler;
 	struct clk *clk;
-	struct gpio_desc *pwdn_gpio;
 	struct v4l2_rect crop_rect;
 	int hflip;
 	int vflip;
@@ -976,16 +974,11 @@ static int imx477_s_power(struct v4l2_subdev *sd, int on)
 
 	if (on) {
 		dev_dbg(&client->dev, "imx477 power on\n");
-		if (priv->pwdn_gpio)
-			gpiod_set_value_cansleep(priv->pwdn_gpio, 1);
-		msleep(5);
 		clk_prepare_enable(priv->clk);
 		msleep(20);
 	} else {
 		dev_dbg(&client->dev, "imx477 power off\n");
 		clk_disable_unprepare(priv->clk);
-		if (priv->pwdn_gpio)
-			gpiod_set_value_cansleep(priv->pwdn_gpio, 0);
 	}
 
 	return 0;
@@ -1562,15 +1555,6 @@ static int imx477_probe(struct i2c_client *client,
 		return -EPROBE_DEFER;
 	}
 
-	/* XSHUTDOWN GPIO — drive high immediately to release I2C bus */
-	priv->pwdn_gpio = devm_gpiod_get_optional(&client->dev, "pwdn",
-						  GPIOD_OUT_HIGH);
-	if (IS_ERR(priv->pwdn_gpio)) {
-		dev_err(&client->dev, "Error getting pwdn gpio\n");
-		return PTR_ERR(priv->pwdn_gpio);
-	}
-	if (priv->pwdn_gpio)
-		msleep(10);
 
 	/* Default to 2028x1520 (2x2 binned 40fps) */
 	priv->cur_mode = &supported_modes[0];

@@ -43,8 +43,6 @@
                                 reg = <0x1a>;
                                 clocks = <&clk_cam_24m>;
                                 clock-names = "xvclk";
-                                /* GPIO3_C6 = offset 0x16, active high */
-                                pwdn-gpios = <0x7f 0x16 0x00>;
                                 rockchip,camera-module-index = <0x00>;
                                 rockchip,camera-module-facing = "back";
                                 rockchip,camera-module-name = "rpi-camera-hq";
